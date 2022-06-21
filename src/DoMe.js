@@ -9,31 +9,25 @@ import DialogTitle from '@mui/material/DialogTitle';
 import AcUnitIcon from '@mui/icons-material/AcUnit';
 import {Checkbox, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText} from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
+import {useState} from "react";
 
 export default function DoMe() {
     const [open, setOpen] = React.useState(false);
     const [currentInputText, setCurrentInputText] = React.useState('');
+    const [toDoArray, setToDoArray] = React.useState([]);
     const [checked, setChecked] = React.useState([0]);
+    const [nextID, setNextID] = useState(0);
 
-    const toDoArray = [];
-    const ID = 0;
 
     const createToDo = () => {
-        if (toDoArray.length === 0){
-            const addedToDo = {
-                ID:0,
-                text:currentInputText
-            };
-            toDoArray[0] = addedToDo;
-        }
-        else {
-            const addedToDo = {
-                ID: toDoArray.length,
-                text: currentInputText
-            };
+        const newToDo = {
+            ID: nextID,
+            text: currentInputText
+        };
 
-            toDoArray[toDoArray.length - 1] = addedToDo;
-        }
+        setNextID(nextID + 1);
+        const newArray = toDoArray.concat(newToDo);
+        setToDoArray(newArray);
     }
 
     const handleClickOpen = () => {
@@ -65,12 +59,16 @@ export default function DoMe() {
     return (
         <div>
             <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                {[0, 1, 2, 3].map((value) => {
-                    const labelId = `checkbox-list-label-${value}`;
+                {toDoArray.map((toDoObject) => {
+                    if (toDoArray.length === 0){
+                        return;
+                    }
+                    else{
+                    const labelId = `toDo-list-label-${toDoObject.ID}`;
 
                     return (
                         <ListItem
-                            key={value}
+                            key={toDoObject.ID}
                             secondaryAction={
                                 <IconButton edge="end" aria-label="comments">
                                     <EditIcon />
@@ -78,21 +76,21 @@ export default function DoMe() {
                             }
                             disablePadding
                         >
-                            <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
+                            <ListItemButton role={undefined} onClick={handleToggle(toDoObject.ID)} dense>
                                 <ListItemIcon>
                                     <Checkbox
                                         edge="start"
-                                        checked={checked.indexOf(value) !== -1}
+                                        checked={checked.indexOf(toDoObject) !== -1}
                                         tabIndex={-1}
                                         disableRipple
                                         inputProps={{ 'aria-labelledby': labelId }}
                                     />
                                 </ListItemIcon>
-                                <ListItemText id={labelId} primary={`Line item ${value + 1}`} />
+                                <ListItemText id={labelId} primary={toDoObject.text} />
                             </ListItemButton>
                         </ListItem>
                     );
-                })}
+                }})}
             </List>
             <Button variant="outlined" onClick={handleClickOpen}>
                 <AcUnitIcon />
