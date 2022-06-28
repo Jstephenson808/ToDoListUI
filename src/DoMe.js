@@ -1,9 +1,19 @@
+import {Button} from "@mui/material";
+import {useState} from "react";
+
 export default function () {
+    const [addButtonOpenFlag, setAddButtonOpenFlag] = useState(false);
+
     return (
         <>
-            <button aria-label={'add_button'}>
+            <Button aria-label={'add-button'} onClick={() =>{
+                setAddButtonOpenFlag(true);
+            }}>
                 Add
-            </button>
+            </Button>
+            <dialog open={addButtonOpenFlag} aria-label={'add-new-to-do'}>
+                Add New To Do
+            </dialog>
         </>
             );
 }
