@@ -2,27 +2,26 @@ import {render, screen} from "@testing-library/react";
 import DoMe from "./DoMe";
 import userEvent from "@testing-library/user-event";
 
-const addButton = () => {
-    return screen.getByRole('button', {name: 'add-button'});
-}
+const addButton = () => screen.getByRole('button', {name: 'add-button'});
+const cancelAddButton = () => screen.getByRole('button', {name: 'cancel-add'});
+
+
 
 describe('Do Me', () => {
-    it('should have an add button', () => {
+    beforeEach(() => {
         render(<DoMe/>);
-        expect(addButton()).toBeInTheDocument()
+    })
+    it('should have an add button', () => {
+     expect(addButton()).toBeInTheDocument()
     })
     it('should open dialog when button is pressed', () => {
-        render(<DoMe/>);
+       userEvent.click(addButton());
 
-        userEvent.click(addButton());
-
-        expect(screen.getByRole('dialog', {name: 'add-new-to-do'})).toBeInTheDocument();
+        expect(addButton()).toBeInTheDocument();
     })
-    it('dialog should have cancel button', () => {
-        render(<DoMe/>);
-
+    it('add dialog should have cancel button', () => {
         userEvent.click(addButton());
 
-        expect(screen.getByRole('button', {name: 'cancel-add'})).toBeInTheDocument();
+        expect(cancelAddButton()).toBeInTheDocument();
     })
 })
