@@ -8,14 +8,21 @@ const addButton = () => {
 
 describe('Do Me', () => {
     it('should have an add button', () => {
-        render(<DoMe />);
+        render(<DoMe/>);
         expect(addButton()).toBeInTheDocument()
     })
     it('should open dialog when button is pressed', () => {
-        render(<DoMe />);
+        render(<DoMe/>);
 
         userEvent.click(addButton());
 
-        expect(screen.getByRole('dialog', {name:'add-new-to-do'})).toBeInTheDocument();
+        expect(screen.getByRole('dialog', {name: 'add-new-to-do'})).toBeInTheDocument();
+    })
+    it('dialog should have cancel button', () => {
+        render(<DoMe/>);
+
+        userEvent.click(addButton());
+
+        expect(screen.getByRole('button', {name: 'cancel-add'})).toBeInTheDocument();
     })
 })
