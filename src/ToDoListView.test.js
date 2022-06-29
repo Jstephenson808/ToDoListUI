@@ -2,7 +2,7 @@ import {render, screen, waitForElementToBeRemoved} from "@testing-library/react"
 import DoMe from "./ToDoListView";
 import userEvent from "@testing-library/user-event";
 
-const addButton = () => screen.getByText('')
+const addButton = () => screen.getByText('Add')
 const cancelAddToDoButton = () => screen.getByText('Cancel');
 const addToDoDialog = () => screen.queryByRole('dialog');
 const addToDoTextBox = () => screen.getByLabelText('Enter To Do here');
@@ -56,14 +56,14 @@ describe('To Do List', () => {
             });
         });
 
-        it('should save to do and display when save is pressed',  () => {
+        it('should save to do and display when save is pressed', () => {
             userEvent.type(addToDoTextBox(), 'test todo');
             userEvent.click(saveToDoButton());
 
             expect(screen.getByText('test todo')).toBeInTheDocument();
         });
 
-        it('should clear the to do text box when cancel is pressed', (done) => {
+        it('should clear the add to do text box when cancel is pressed', (done) => {
             userEvent.type(addToDoTextBox(), 'test todo');
             userEvent.click(cancelAddToDoButton());
 
@@ -72,7 +72,16 @@ describe('To Do List', () => {
                 expect(addToDoTextBox()).toHaveValue('')
                 done();
             });
+        });
+        it('should clear the add to do text box when save is pressed', (done) => {
+            userEvent.type(addToDoTextBox(), 'test todo');
+            userEvent.click(saveToDoButton());
 
-        })
+            waitForElementToBeRemoved(screen.queryByRole('dialog')).then(() => {
+                userEvent.click(addButton());
+                expect(addToDoTextBox()).toHaveValue('')
+                done();
+            });
+        });
     });
 });
