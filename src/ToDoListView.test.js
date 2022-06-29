@@ -63,10 +63,16 @@ describe('To Do List', () => {
             expect(screen.getByText('test todo')).toBeInTheDocument();
         });
 
-        //this doesn't work
-        waitForElementToBeRemoved(screen.queryByRole('dialog')).then(() => {
-            expect(screen.queryByRole('dialog', {name: 'add-new-to-do'})).not.toBeInTheDocument();
-            done();
-        });
+        it('should clear the to do text box when cancel is pressed', (done) => {
+            userEvent.type(addToDoTextBox(), 'test todo');
+            userEvent.click(cancelAddToDoButton());
+
+            waitForElementToBeRemoved(screen.queryByRole('dialog')).then(() => {
+                userEvent.click(addButton());
+                expect(addToDoTextBox()).toHaveValue('')
+                done();
+            });
+
+        })
     });
 });
