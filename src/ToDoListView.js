@@ -20,6 +20,9 @@ export default function () {
             handleError('Input is empty');
 
         }
+        if(addItemTextBoxValue.length > 100){
+            handleError('Input is greater than 100 chars');
+        }
         else{
         setToDoList(toDoList.concat(createToDoObject(addItemTextBoxValue)));
         handleClose();}
