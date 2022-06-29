@@ -1,32 +1,42 @@
 import {Button, Dialog, DialogContent, DialogTitle, List, ListItem, TextField} from "@mui/material";
 import {useState} from "react";
 
-//TODO Convert tests to things which users see not internal labels
-
 // eslint-disable-next-line react/display-name
 export default function () {
     const [addButtonOpenFlag, setAddButtonOpenFlag] = useState(false);
     const [addItemTextBoxValue, setAddItemTextBoxValue] = useState('');
     const [toDoList, setToDoList] = useState([]);
-    const [nextId, setNextId] = useState(0)
+    const [nextId, setNextId] = useState(0);
+    const [errorMessage, setErrorMessage] = useState('')
 
     const handleClose = () => {
+        setErrorMessage('')
         setAddButtonOpenFlag(false);
         setAddItemTextBoxValue('');
     }
 
     const handleSave = () => {
+        if(addItemTextBoxValue.length === 0){
+            handleError('Input is empty');
+
+        }
+        else{
         setToDoList(toDoList.concat(createToDoObject(addItemTextBoxValue)));
-        handleClose();
+        handleClose();}
+    }
+
+    const handleError = (error) => {
+        setAddItemTextBoxValue('');
+        setErrorMessage(error);
     }
 
     const createToDoObject = (textBoxValue) => {
-        const id = handleID();
+        const id = generateId();
         const toDo = { id: id, value: textBoxValue};
         return toDo;
     }
 
-    const handleID = () => {
+    const generateId = () => {
         const id = nextId;
         setNextId(id+1);
         return id;
@@ -50,6 +60,7 @@ export default function () {
                     <TextField
                         label="Enter To Do here"
                         value={addItemTextBoxValue}
+                        helperText={errorMessage}
                         onChange={(event) => setAddItemTextBoxValue(event.target.value)}
                     />
                 </DialogContent>

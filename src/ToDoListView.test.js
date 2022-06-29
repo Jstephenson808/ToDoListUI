@@ -4,13 +4,12 @@ import userEvent from "@testing-library/user-event";
 
 const addButton = () => screen.getByText('Add')
 const cancelAddToDoButton = () => screen.getByText('Cancel');
-const addToDoDialog = () => screen.queryByRole('dialog');
+const addToDoDialog = () => screen.queryByText('Add New To Do');
 const addToDoTextBox = () => screen.getByLabelText('Enter To Do here');
 const saveToDoButton = () => screen.getByText('Save');
 
 
-//TODO add tests for validating that box is cleared on close of dialog (save and cancel)
-//TODO
+
 describe('To Do List', () => {
     beforeEach(() => {
         render(<DoMe/>);
@@ -73,6 +72,7 @@ describe('To Do List', () => {
                 done();
             });
         });
+
         it('should clear the add to do text box when save is pressed', (done) => {
             userEvent.type(addToDoTextBox(), 'test todo');
             userEvent.click(saveToDoButton());
@@ -82,6 +82,22 @@ describe('To Do List', () => {
                 expect(addToDoTextBox()).toHaveValue('')
                 done();
             });
+        });
+
+        //this passes when it shouldn't
+        it('should not allow saving if text box is empty', () => {
+            userEvent.click(saveToDoButton());
+
+            expect(screen.getByText('Input is empty')).toBeInTheDocument();
+        })
+
+        it('should not allow to dos to be longer than 100 chars', () => {
+            for (let i = 0; i < 100; i++) {
+                userEvent.type('i');
+            }
+            userEvent.click(saveToDoButton());
+
+            expect(screen.getByText('Input is greater than 100 chars'));
         });
     });
 });
