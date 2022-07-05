@@ -6,8 +6,7 @@ export default function () {
     const [addButtonOpenFlag, setAddButtonOpenFlag] = useState(false);
     const [addItemTextBoxValue, setAddItemTextBoxValue] = useState('');
     const [toDoList, setToDoList] = useState([]);
-    const [nextId, setNextId] = useState(0);
-    const [errorMessage, setErrorMessage] = useState('')
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleClose = () => {
         setErrorMessage('')
@@ -34,22 +33,18 @@ export default function () {
     }
 
     const createToDoObject = (textBoxValue) => {
-        const id = generateId();
-        const toDo = { id: id, value: textBoxValue};
+        const toDo = {
+            name: textBoxValue
+        };
         return toDo;
     }
-
-    const generateId = () => {
-        const id = nextId;
-        setNextId(id+1);
-        return id;
-    }
-
 
     return (
         <>
             <List>
-                {toDoList.map((toDo) => (<ListItem key={toDo.id}> {(toDo.value)} </ListItem>))}
+                {toDoList.map((toDo) =>
+                    (<ListItem key={toDo.name}> {(toDo.name)} </ListItem>))
+                }
             </List>
             <Button aria-label={'add-button'} onClick={() => {
                 setAddButtonOpenFlag(true);

@@ -92,7 +92,8 @@ describe('To Do List', () => {
         })
 
         it('should not allow to dos to be longer than 100 chars', () => {
-            userEvent.type('Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean ma. dfjkljasklfjasdl;djfasklfaj;l');
+            userEvent.type('Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean ma. dfjkljasklfjasdl;djfasklfaj;l123435135432526536543');
+
             userEvent.click(saveToDoButton());
 
             expect(screen.getByText('Input is greater than 100 chars')).toBeInTheDocument();
