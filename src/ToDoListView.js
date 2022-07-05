@@ -2,8 +2,6 @@ import { Button, Dialog, DialogContent, DialogTitle, List, ListItem, ListItemTex
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-//TODO Convert tests to things which users see not internal labels
-
 // eslint-disable-next-line react/display-name
 export default function () {
   const [addButtonOpenFlag, setAddButtonOpenFlag] = useState(false);
