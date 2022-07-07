@@ -5,3 +5,9 @@ node_js:
 script:
   - npm test
   - npm run build
+deploy:
+  provider: heroku
+  api_key: $HEROKU_API_KEY
+  app: fela-kuti-ui
+  on:
+    branch: master
