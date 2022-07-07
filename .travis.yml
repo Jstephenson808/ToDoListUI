@@ -1,3 +1,8 @@
 language: node_js
 node_js:
   - "16"
+
+script:
+  - eslint . --fix
+  - npm test
+  - npm run build
