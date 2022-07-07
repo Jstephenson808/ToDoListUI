@@ -2,8 +2,7 @@ import { Button, Dialog, DialogContent, DialogTitle, List, ListItem, ListItemTex
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-// eslint-disable-next-line react/display-name
-export default function () {
+export default function ToDoListView() {
   const [addButtonOpenFlag, setAddButtonOpenFlag] = useState(false);
   const [addItemTextBoxValue, setAddItemTextBoxValue] = useState('');
   const [toDoList, setToDoList] = useState([]);
