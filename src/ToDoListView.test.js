@@ -32,7 +32,7 @@ describe('To Do List', () => {
   });
 
   it('should fetch data', () => {
-    expect(axios.get).toHaveBeenCalledWith('/todos');
+    expect(axios.get).toHaveBeenCalledWith('/to-dos');
   });
 
   it('should display ToDos', () => {
