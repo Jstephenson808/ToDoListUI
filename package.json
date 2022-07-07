@@ -27,7 +27,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "run": "react-scripts start"
   },
   "eslintConfig": {
     "extends": [
@@ -55,5 +56,5 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.30.1"
   },
-  "proxy": "https://fela-kuti.herokuapp.com"
+  "proxy": "http://localhost:8080"
 }

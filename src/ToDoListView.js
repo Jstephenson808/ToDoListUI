@@ -8,7 +8,8 @@ export default function ToDoListView() {
   const [toDoList, setToDoList] = useState([]);
 
   useEffect(() => {
-    axios.get('/todos').then((response) => {
+    // eslint-disable-next-line no-undef
+    axios.get(process.env.REACT_APP_API_URL + '/todos').then((response) => {
       setToDoList(response.data);
     });
   }, []);
@@ -24,7 +25,8 @@ export default function ToDoListView() {
 
   const handleSave = () => {
     axios
-      .post(`/todos`, {
+      // eslint-disable-next-line no-undef
+      .post(process.env.REACT_APP_API_URL + `/todos`, {
         addItemTextBoxValue,
       })
       .then((response) => {
