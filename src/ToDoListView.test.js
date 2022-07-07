@@ -72,17 +72,6 @@ describe('To Do List', () => {
       });
     });
 
-    // it('should clear the add to do text box when save is pressed', (done) => {
-    //   userEvent.type(addToDoTextBox(), 'test');
-    //   userEvent.click(saveToDoButton());
-    //
-    //   waitForElementToBeRemoved(screen.queryByRole('dialog')).then(() => {
-    //     userEvent.click(addButton());
-    //     expect(addToDoTextBox()).toHaveValue('');
-    //     done();
-    //   });
-    // });
-
     it('should post on save', () => {
       axios.post.mockImplementation(() => new Promise(jest.fn()));
 
