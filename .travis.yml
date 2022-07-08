@@ -3,8 +3,7 @@ node_js:
   - "16"
 
 script:
-  - npm test
-  - npm run build
+  - npm run lint
 before_deploy:
   - rvm $(travis_internal_ruby) --fuzzy do ruby -S gem install faraday -v 1.8.0
 deploy:
