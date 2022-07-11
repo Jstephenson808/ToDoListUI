@@ -36,6 +36,9 @@ export default function ToDoListView() {
     handleClose();
   };
 
+  // eslint-disable-next-line no-unused-vars
+  const testFunc = () => {};
+
   // const createToDoObject = (textBoxValue) => {
   //     const id = handleID();
   //     const toDo = { id: id, value: textBoxValue};
