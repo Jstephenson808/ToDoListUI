@@ -9,6 +9,7 @@ const cancelAddToDoButton = () => screen.getByText('Cancel');
 const addToDoDialog = () => screen.queryByRole('dialog');
 const addToDoTextBox = () => screen.getByLabelText('Enter To Do here');
 const saveToDoButton = () => screen.getByText('Save');
+const getMainToDoList = () => screen.getByRole('list', { id: 'mainToDoList' });
 
 jest.mock('axios');
 
@@ -34,10 +35,16 @@ describe('To Do List', () => {
   it('should fetch data', () => {
     expect(axios.get).toHaveBeenCalledWith('/todos');
   });
-
+  it('should contain ToDo List', () => {
+    expect(getMainToDoList()).toBeInTheDocument();
+  });
   it('should display ToDos', () => {
     expect(screen.getByText('Item 1')).toBeInTheDocument();
     expect(screen.getByText('Item 2')).toBeInTheDocument();
+  });
+  // ToDo make this more specific
+  it('should have edit button on ToDo list', () => {
+    expect(screen.getByRole('list', { id: 'mainToDoList' })).toHaveTextContent('edit');
   });
 
   describe('Add To Do dialog', () => {

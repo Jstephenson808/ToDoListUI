@@ -23,11 +23,12 @@ export default function ToDoListView() {
     setAddItemTextBoxValue('');
   };
 
+  // todo: should post object not string
   const handleSave = () => {
     axios
       // eslint-disable-next-line no-undef
       .post(process.env.REACT_APP_API_URL + `/todos`, {
-        addItemTextBoxValue,
+        name: addItemTextBoxValue,
       })
       .then((response) => {
         const updatedToDos = [...toDoList, response.data];
@@ -36,18 +37,13 @@ export default function ToDoListView() {
     handleClose();
   };
 
-  // const createToDoObject = (textBoxValue) => {
-  //     const id = handleID();
-  //     const toDo = { id: id, value: textBoxValue};
-  //     return toDo;
-  // }
-
   return (
     <>
-      <List>
+      <List id={'mainToDoList'}>
         {toDoList.map((item) => (
-          <ListItem key={item.id}>
+          <ListItem key={item.id} id={item.id}>
             <ListItemText primary={item.name} />
+            <Button>edit</Button>
           </ListItem>
         ))}
       </List>
