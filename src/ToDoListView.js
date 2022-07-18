@@ -27,7 +27,7 @@ export default function ToDoListView() {
     axios
       // eslint-disable-next-line no-undef
       .post(process.env.REACT_APP_API_URL + `/todos`, {
-        addItemTextBoxValue,
+        name: addItemTextBoxValue,
       })
       .then((response) => {
         const updatedToDos = [...toDoList, response.data];
