@@ -108,15 +108,13 @@ describe('To Do List', () => {
     });
   });
 
-  // describe('Axios', () => {
-  //     it('should fetch data', () =>{
-  //         const toDos = [
-  //             {name: 'Item 1'},
-  //             {name: 'Item 2'}];
-  //
-  //         axios.get.mockImplementationOnce(() => Promise.resolve(toDos))
-  //
-  //         expect(axios.get).toHaveBeenCalledWith('/todos');
-  //     })
-  // });
+  describe('Axios', () => {
+    it('should fetch data', () => {
+      const toDos = [{ name: 'Item 1' }, { name: 'Item 2' }];
+
+      axios.get.mockImplementationOnce(() => Promise.resolve(toDos));
+
+      expect(axios.get).toHaveBeenCalledWith('/todos');
+    });
+  });
 });
