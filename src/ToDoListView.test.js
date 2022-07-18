@@ -78,7 +78,7 @@ describe('To Do List', () => {
       userEvent.type(addToDoTextBox(), 'Item');
       userEvent.click(saveToDoButton());
 
-      expect(axios.post).toHaveBeenCalledWith('/todos', { addItemTextBoxValue: 'Item' });
+      expect(axios.post).toHaveBeenCalledWith('/todos', { name: 'Item' });
     });
     it('should clear the add to do text box when cancel is pressed', (done) => {
       userEvent.type(addToDoTextBox(), 'test todo');
