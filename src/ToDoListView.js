@@ -36,18 +36,28 @@ export default function ToDoListView() {
     handleClose();
   };
 
-  // const createToDoObject = (textBoxValue) => {
-  //     const id = handleID();
-  //     const toDo = { id: id, value: textBoxValue};
-  //     return toDo;
-  // }
+  const handleDelete = (itemToDeleteId) => {
+    axios
+      // eslint-disable-next-line no-undef
+      .delete(process.env.REACT_APP_API_URL + `/todos`, {
+        data: {
+          id: itemToDeleteId,
+        },
+      })
+      .then((response) => {
+        setToDoList(toDoList.filter((toDo) => toDo.id !== response.data.id));
+      });
+  };
 
   return (
     <>
-      <List>
+      <List id={'main-to-do-list'}>
         {toDoList.map((item) => (
-          <ListItem key={item.id}>
+          <ListItem key={item.id} id={item.id}>
             <ListItemText primary={item.name} />
+            <Button aria-label={'delete-button-' + item.id} onClick={() => handleDelete(item.id)}>
+              Delete
+            </Button>
           </ListItem>
         ))}
       </List>
