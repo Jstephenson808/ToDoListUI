@@ -36,12 +36,6 @@ export default function ToDoListView() {
     handleClose();
   };
 
-  // const createToDoObject = (textBoxValue) => {
-  //     const id = handleID();
-  //     const toDo = { id: id, value: textBoxValue};
-  //     return toDo;
-  // }
-
   return (
     <>
       <List>
