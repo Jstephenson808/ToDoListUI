@@ -6,7 +6,7 @@ export class ToDoRequestService {
     this.TODO_API_URL = process.env.REACT_APP_API_URL + '/todos';
   }
 
-  async getAllToDos() {
+  getAllToDos() {
     // eslint-disable-next-line no-undef
     return axios.get(this.TODO_API_URL);
   }
