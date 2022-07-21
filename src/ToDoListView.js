@@ -46,7 +46,7 @@ export default function ToDoListView() {
       });
     handleClose();
   };
-  
+
   const handleDelete = (itemToDeleteId) => {
     axios
       // eslint-disable-next-line no-undef
@@ -56,7 +56,7 @@ export default function ToDoListView() {
         setToDoList(toDoList.filter((toDo) => toDo.id !== itemToDeleteId));
       });
   };
-  
+
   return (
     <>
       <List aria-label="main-todo-list">
