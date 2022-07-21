@@ -1,4 +1,15 @@
-import { Button, Dialog, DialogContent, DialogTitle, List, ListItem, ListItemText, TextField } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  TextField,
+} from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -36,18 +47,25 @@ export default function ToDoListView() {
     handleClose();
   };
 
-  // const createToDoObject = (textBoxValue) => {
-  //     const id = handleID();
-  //     const toDo = { id: id, value: textBoxValue};
-  //     return toDo;
-  // }
+  const handleDelete = (itemToDeleteId) => {
+    axios
+      // eslint-disable-next-line no-undef
+      .delete(process.env.REACT_APP_API_URL + `/todos/` + itemToDeleteId)
+      // eslint-disable-next-line no-unused-vars
+      .then(() => {
+        setToDoList(toDoList.filter((toDo) => toDo.id !== itemToDeleteId));
+      });
+  };
 
   return (
     <>
-      <List>
+      <List aria-label="main-todo-list">
         {toDoList.map((item) => (
-          <ListItem key={item.id}>
+          <ListItem key={item.id} aria-label={'list-item-' + item.id}>
             <ListItemText primary={item.name} />
+            <IconButton aria-label="delete" onClick={() => handleDelete(item.id)}>
+              <DeleteIcon />
+            </IconButton>
           </ListItem>
         ))}
       </List>
