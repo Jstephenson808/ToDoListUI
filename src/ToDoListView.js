@@ -12,15 +12,17 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { ToDoRequestService } from './ToDoRequestService';
 
 export default function ToDoListView() {
   const [addButtonOpenFlag, setAddButtonOpenFlag] = useState(false);
   const [addItemTextBoxValue, setAddItemTextBoxValue] = useState('');
   const [toDoList, setToDoList] = useState([]);
+  // eslint-disable-next-line no-unused-vars
+  const [toDoRequestService, setToDoRequestService] = useState(new ToDoRequestService());
 
   useEffect(() => {
-    // eslint-disable-next-line no-undef
-    axios.get(process.env.REACT_APP_API_URL + '/todos').then((response) => {
+    toDoRequestService.getAllToDos().then((response) => {
       setToDoList(response.data);
     });
   }, []);
