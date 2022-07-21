@@ -9,7 +9,7 @@ const cancelAddToDoButton = () => screen.getByText('Cancel');
 const addToDoDialog = () => screen.queryByRole('dialog');
 const addToDoTextBox = () => screen.getByLabelText('Enter To Do here');
 const saveToDoButton = () => screen.getByText('Save');
-const getMainToDoList = () => screen.getByRole('list', { id: 'main-to-do-list' });
+const getMainToDoList = () => screen.getByRole('list');
 
 jest.mock('axios');
 
@@ -46,28 +46,24 @@ describe('To Do List', () => {
   });
 
   it('list elements should contain delete button', () => {
-    const list = getMainToDoList();
-    const { getAllByRole } = within(list);
-    const items = getAllByRole('listitem');
-    const listText = items.map((item) => item.textContent);
-    listText.forEach((value) => {
-      expect(value).toContain('Delete');
-    });
+    const buttons = within(getMainToDoList()).getAllByRole('button', { name: 'delete' });
+
+    expect(buttons).toHaveLength(2);
   });
 
   it('delete button should send delete request', () => {
     axios.delete.mockImplementation(() => new Promise(jest.fn()));
 
-    userEvent.click(screen.getByLabelText('delete-button-1'));
+    userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'delete' }));
 
-    expect(axios.delete).toBeCalledWith('/todos', { data: { id: 1 } });
+    expect(axios.delete).toBeCalledWith('/todos/1');
   });
 
   it('delete response should remove item from list', async () => {
-    axios.delete.mockResolvedValue({ data: { id: 1 } });
+    axios.delete.mockResolvedValue({});
 
     await act(async () => {
-      userEvent.click(screen.getByLabelText('delete-button-1'));
+      userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'delete' }));
     });
 
     expect(screen.queryByText('Item 1')).not.toBeInTheDocument();
