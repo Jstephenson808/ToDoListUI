@@ -11,7 +11,6 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import ToDoRequestService from './ToDoRequestService';
 
 export default function ToDoListView() {
@@ -43,9 +42,7 @@ export default function ToDoListView() {
   };
 
   const handleDelete = (itemToDeleteId) => {
-    axios
-      // eslint-disable-next-line no-undef
-      .delete(process.env.REACT_APP_API_URL + `/todos/` + itemToDeleteId)
+    ToDoRequestService.deleteToDo(itemToDeleteId)
       // eslint-disable-next-line no-unused-vars
       .then(() => {
         setToDoList(toDoList.filter((toDo) => toDo.id !== itemToDeleteId));

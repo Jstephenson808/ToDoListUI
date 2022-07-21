@@ -36,4 +36,11 @@ describe('To Do List Service', () => {
 
     expect(axios.post).toHaveBeenCalledWith('/todos', { name: 'Item' });
   });
+  it('should send delete request when deleteToDo is called', () => {
+    axios.delete.mockImplementation(() => new Promise(jest.fn));
+
+    ToDoRequestService.deleteToDo(1);
+
+    expect(axios.delete).toHaveBeenCalledWith('/todos/1');
+  });
 });

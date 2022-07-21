@@ -12,6 +12,10 @@ const ToDoRequestService = {
   saveToDo(name) {
     return axios.post(this.TODO_API_URL, { name: name });
   },
+
+  deleteToDo(id) {
+    return axios.delete(this.TODO_API_URL + '/' + id);
+  },
 };
 
 export default ToDoRequestService;
