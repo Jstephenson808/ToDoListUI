@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ToDoRequestService } from './ToDoRequestService';
+import ToDoRequestService from './ToDoRequestService';
 import { act } from 'react-dom/test-utils';
 
 jest.mock('axios');
@@ -13,9 +13,7 @@ describe('To Do List Service', () => {
     axios.get.mockResolvedValue({ data: toDos });
   });
   it('should call axios get when getAllToDos is called', () => {
-    const toDoRequestService = new ToDoRequestService();
-
-    toDoRequestService.getAllToDos();
+    ToDoRequestService.getAllToDos();
 
     expect(axios.get).toBeCalledWith('/todos');
   });
@@ -24,19 +22,17 @@ describe('To Do List Service', () => {
       { id: 1, name: 'Item 1' },
       { id: 2, name: 'Item 2' },
     ];
-    const toDoRequestService = new ToDoRequestService();
 
     const response = await act(async () => {
-      return toDoRequestService.getAllToDos();
+      return ToDoRequestService.getAllToDos();
     });
 
     expect(response.data).toStrictEqual(toDos);
   });
   it('should post todos when saveToDo is called', () => {
-    const toDoRequestService = new ToDoRequestService();
     axios.post.mockImplementation(() => new Promise(jest.fn()));
 
-    toDoRequestService.saveToDo('Item');
+    ToDoRequestService.saveToDo('Item');
 
     expect(axios.post).toHaveBeenCalledWith('/todos', { name: 'Item' });
   });

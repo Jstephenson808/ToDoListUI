@@ -12,17 +12,15 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { ToDoRequestService } from './ToDoRequestService';
+import ToDoRequestService from './ToDoRequestService';
 
 export default function ToDoListView() {
   const [addButtonOpenFlag, setAddButtonOpenFlag] = useState(false);
   const [addItemTextBoxValue, setAddItemTextBoxValue] = useState('');
   const [toDoList, setToDoList] = useState([]);
-  // eslint-disable-next-line no-unused-vars
-  const [toDoRequestService, setToDoRequestService] = useState(new ToDoRequestService());
 
   useEffect(() => {
-    toDoRequestService.getAllToDos().then((response) => {
+    ToDoRequestService.getAllToDos().then((response) => {
       setToDoList(response.data);
     });
   }, []);
@@ -37,7 +35,7 @@ export default function ToDoListView() {
   };
 
   const handleSave = () => {
-    toDoRequestService.saveToDo(addItemTextBoxValue).then((response) => {
+    ToDoRequestService.saveToDo(addItemTextBoxValue).then((response) => {
       const updatedToDos = [...toDoList, response.data];
       setToDoList(updatedToDos);
     });
