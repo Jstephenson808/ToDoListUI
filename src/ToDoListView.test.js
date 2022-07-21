@@ -13,7 +13,7 @@ const getMainToDoList = () => screen.getByRole('list');
 
 jest.mock('axios');
 
-describe('To Do List', () => {
+describe('To Do List View', () => {
   beforeEach(async () => {
     const toDos = [
       { id: 1, name: 'Item 1' },
