@@ -37,15 +37,10 @@ export default function ToDoListView() {
   };
 
   const handleSave = () => {
-    axios
-      // eslint-disable-next-line no-undef
-      .post(process.env.REACT_APP_API_URL + `/todos`, {
-        name: addItemTextBoxValue,
-      })
-      .then((response) => {
-        const updatedToDos = [...toDoList, response.data];
-        setToDoList(updatedToDos);
-      });
+    toDoRequestService.saveToDo(addItemTextBoxValue).then((response) => {
+      const updatedToDos = [...toDoList, response.data];
+      setToDoList(updatedToDos);
+    });
     handleClose();
   };
 

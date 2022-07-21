@@ -32,4 +32,12 @@ describe('To Do List Service', () => {
 
     expect(response.data).toStrictEqual(toDos);
   });
+  it('should post todos when saveToDo is called', () => {
+    const toDoRequestService = new ToDoRequestService();
+    axios.post.mockImplementation(() => new Promise(jest.fn()));
+
+    toDoRequestService.saveToDo('Item');
+
+    expect(axios.post).toHaveBeenCalledWith('/todos', { name: 'Item' });
+  });
 });
