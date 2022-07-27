@@ -1,20 +1,17 @@
-import axios from 'axios';
+import RestClient from './RestClient';
 
 const ToDoRequestService = {
-  // eslint-disable-next-line no-undef
-  TODO_API_URL: process.env.REACT_APP_API_URL + '/todos',
-
   getAllToDos() {
     // eslint-disable-next-line no-undef
-    return axios.get(this.TODO_API_URL);
+    return RestClient.get('/todos');
   },
 
   saveToDo(name) {
-    return axios.post(this.TODO_API_URL, { name: name });
+    return RestClient.post('/todos', { name });
   },
 
   deleteToDo(id) {
-    return axios.delete(this.TODO_API_URL + '/' + id);
+    return RestClient.delete('/todos/' + id);
   },
 };
 
