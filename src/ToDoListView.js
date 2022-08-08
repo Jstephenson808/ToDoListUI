@@ -18,6 +18,7 @@ export default function ToDoListView() {
   const [addButtonOpenFlag, setAddButtonOpenFlag] = useState(false);
   const [addItemTextBoxValue, setAddItemTextBoxValue] = useState('');
   const [toDoList, setToDoList] = useState([]);
+  const [editItemOpenFlag, setEditItemOpenFlag] = useState(false);
 
   useEffect(() => {
     ToDoRequestService.getAllToDos().then((response) => {
@@ -25,11 +26,11 @@ export default function ToDoListView() {
     });
   }, []);
 
-  const handleClickOpen = () => {
+  const handleAddOpen = () => {
     setAddButtonOpenFlag(true);
   };
 
-  const handleClose = () => {
+  const handleAddClose = () => {
     setAddButtonOpenFlag(false);
     setAddItemTextBoxValue('');
   };
@@ -39,9 +40,12 @@ export default function ToDoListView() {
       const updatedToDos = [...toDoList, response.data];
       setToDoList(updatedToDos);
     });
-    handleClose();
+    handleAddClose();
   };
 
+  const handleEditOpen = () => {
+    setEditItemOpenFlag(true);
+  };
   const handleDelete = (itemToDeleteId) => {
     ToDoRequestService.deleteToDo(itemToDeleteId)
       // eslint-disable-next-line no-unused-vars
@@ -56,7 +60,7 @@ export default function ToDoListView() {
         {toDoList.map((item) => (
           <ListItem key={item.id} aria-label={'list-item-' + item.id}>
             <ListItemText primary={item.name} />
-            <IconButton aria-label="edit">
+            <IconButton aria-label="edit" onClick={handleEditOpen}>
               <EditIcon />
             </IconButton>
             <IconButton aria-label="delete" onClick={() => handleDelete(item.id)}>
@@ -65,7 +69,7 @@ export default function ToDoListView() {
           </ListItem>
         ))}
       </List>
-      <Button aria-label={'add-button'} onClick={handleClickOpen}>
+      <Button aria-label={'add-button'} onClick={handleAddOpen}>
         Add
       </Button>
 
@@ -78,12 +82,16 @@ export default function ToDoListView() {
             onChange={(event) => setAddItemTextBoxValue(event.target.value)}
           />
         </DialogContent>
-        <Button onClick={handleClose} aria-label={'cancel-add'}>
+        <Button onClick={handleAddClose} aria-label={'cancel-add'}>
           Cancel
         </Button>
         <Button onClick={handleSave} aria-label={'save-to-do'}>
           Save
         </Button>
+      </Dialog>
+
+      <Dialog open={editItemOpenFlag} aria-label={'edit-to-do'}>
+        <DialogTitle>Edit To Do</DialogTitle>
       </Dialog>
     </>
   );

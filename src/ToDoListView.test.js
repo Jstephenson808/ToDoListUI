@@ -145,5 +145,16 @@ describe('To Do List View', () => {
       expect(screen.queryByText('Item 1')).not.toBeInTheDocument();
     });
   });
-  // describe('Edit')
+  describe('Edit', () => {
+    it('should open edit dialogue box when clicked', () => {
+      userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'edit' }));
+
+      expect(screen.queryByText('Edit To Do')).toBeInTheDocument();
+    });
+    it('should contain text box with To Do name', () => {
+      userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'edit' }));
+
+      expect(screen.queryByText('Item 1')).toBeInTheDocument();
+    });
+  });
 });
