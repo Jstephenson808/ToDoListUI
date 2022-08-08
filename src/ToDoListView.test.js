@@ -12,6 +12,8 @@ const saveToDoButton = () => screen.getByText('Save');
 const getMainToDoList = () => screen.getByRole('list');
 const itemOneDeleteButton = () =>
   within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'delete' });
+const editButton = () => within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'edit' });
+const editTextBox = () => screen.getByLabelText('Edit To Do here');
 
 jest.mock('./ToDoRequestService');
 
@@ -146,15 +148,17 @@ describe('To Do List View', () => {
     });
   });
   describe('Edit', () => {
-    it('should open edit dialogue box when clicked', () => {
-      userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'edit' }));
-
-      expect(screen.queryByText('Edit To Do')).toBeInTheDocument();
+    beforeEach(() => {
+      userEvent.click(editButton());
     });
-    it('should contain text box with To Do name', () => {
-      userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'edit' }));
-
-      expect(screen.queryByText('Item 1')).toBeInTheDocument();
+    it('should open edit dialogue box when clicked', () => {
+      expect(screen.queryByText('Edit')).toBeInTheDocument();
+    });
+    it('should contain text box', () => {
+      expect(editTextBox()).toBeInTheDocument();
+    });
+    it('text box should contain To Do name', () => {
+      expect(editTextBox()).toHaveValue('Item 1');
     });
   });
 });

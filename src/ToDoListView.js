@@ -17,6 +17,7 @@ import ToDoRequestService from './ToDoRequestService';
 export default function ToDoListView() {
   const [addButtonOpenFlag, setAddButtonOpenFlag] = useState(false);
   const [addItemTextBoxValue, setAddItemTextBoxValue] = useState('');
+  const [editItemTextBoxValue, setEditItemTextBoxValue] = useState('');
   const [toDoList, setToDoList] = useState([]);
   const [editItemOpenFlag, setEditItemOpenFlag] = useState(false);
 
@@ -43,7 +44,8 @@ export default function ToDoListView() {
     handleAddClose();
   };
 
-  const handleEditOpen = () => {
+  const handleEditOpen = (itemToEdit) => {
+    setEditItemTextBoxValue(itemToEdit.name);
     setEditItemOpenFlag(true);
   };
   const handleDelete = (itemToDeleteId) => {
@@ -60,7 +62,7 @@ export default function ToDoListView() {
         {toDoList.map((item) => (
           <ListItem key={item.id} aria-label={'list-item-' + item.id}>
             <ListItemText primary={item.name} />
-            <IconButton aria-label="edit" onClick={handleEditOpen}>
+            <IconButton aria-label="edit" onClick={() => handleEditOpen(item)}>
               <EditIcon />
             </IconButton>
             <IconButton aria-label="delete" onClick={() => handleDelete(item.id)}>
@@ -91,7 +93,12 @@ export default function ToDoListView() {
       </Dialog>
 
       <Dialog open={editItemOpenFlag} aria-label={'edit-to-do'}>
-        <DialogTitle>Edit To Do</DialogTitle>
+        <DialogTitle>Edit</DialogTitle>
+        <TextField
+          label="Edit To Do here"
+          value={editItemTextBoxValue}
+          onChange={(event) => setEditItemTextBoxValue(event.target.value)}
+        />
       </Dialog>
     </>
   );
