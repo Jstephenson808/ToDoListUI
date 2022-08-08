@@ -111,6 +111,9 @@ export default function ToDoListView() {
           <IconButton aria-label={'save-edited-to-do'}>
             <SaveIcon />
           </IconButton>
+          <IconButton aria-label={'cancel-edit-to-do'}>
+            <CancelIcon />
+          </IconButton>
         </DialogActions>
       </Dialog>
     </>

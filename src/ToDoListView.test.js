@@ -166,5 +166,8 @@ describe('To Do List View', () => {
     it('dialog should contain cancel button', () => {
       expect(screen.getByRole('button', { name: 'cancel-edit-to-do' }));
     });
+    it('should call service when save button is pressed', () => {
+      userEvent.click(screen.getByRole('button', { name: 'save-edited-to-do' }));
+    });
   });
 });
