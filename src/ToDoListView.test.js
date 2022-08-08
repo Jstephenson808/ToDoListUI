@@ -160,5 +160,11 @@ describe('To Do List View', () => {
     it('text box should contain To Do name', () => {
       expect(editTextBox()).toHaveValue('Item 1');
     });
+    it('dialog should contain save button', () => {
+      expect(screen.getByRole('button', { name: 'save-edited-to-do' }));
+    });
+    it('dialog should contain save button', () => {
+      expect(screen.getByRole('button', { name: 'cancel-edit-to-do' }));
+    });
   });
 });

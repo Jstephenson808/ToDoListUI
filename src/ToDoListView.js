@@ -1,6 +1,7 @@
 import {
   Button,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogTitle,
   IconButton,
@@ -11,8 +12,10 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
 import { useEffect, useState } from 'react';
 import ToDoRequestService from './ToDoRequestService';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 export default function ToDoListView() {
   const [addButtonOpenFlag, setAddButtonOpenFlag] = useState(false);
@@ -84,21 +87,31 @@ export default function ToDoListView() {
             onChange={(event) => setAddItemTextBoxValue(event.target.value)}
           />
         </DialogContent>
-        <Button onClick={handleAddClose} aria-label={'cancel-add'}>
-          Cancel
-        </Button>
-        <Button onClick={handleSave} aria-label={'save-to-do'}>
-          Save
-        </Button>
+        <DialogActions>
+          <Button onClick={handleAddClose} aria-label={'cancel-add'}>
+            Cancel
+          </Button>
+          <Button onClick={handleSave} aria-label={'save-to-do'}>
+            Save
+          </Button>
+        </DialogActions>
       </Dialog>
 
       <Dialog open={editItemOpenFlag} aria-label={'edit-to-do'}>
         <DialogTitle>Edit</DialogTitle>
-        <TextField
-          label="Edit To Do here"
-          value={editItemTextBoxValue}
-          onChange={(event) => setEditItemTextBoxValue(event.target.value)}
-        />
+        <DialogContent>
+          <TextField
+            label="Edit To Do here"
+            value={editItemTextBoxValue}
+            onChange={(event) => setEditItemTextBoxValue(event.target.value)}
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions>
+          <IconButton aria-label={'save-edited-to-do'}>
+            <SaveIcon />
+          </IconButton>
+        </DialogActions>
       </Dialog>
     </>
   );
