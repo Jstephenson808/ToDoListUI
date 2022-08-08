@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import ToDoRequestService from './ToDoRequestService';
 
 export default function ToDoListView() {
   const [addButtonOpenFlag, setAddButtonOpenFlag] = useState(false);
@@ -19,8 +19,7 @@ export default function ToDoListView() {
   const [toDoList, setToDoList] = useState([]);
 
   useEffect(() => {
-    // eslint-disable-next-line no-undef
-    axios.get(process.env.REACT_APP_API_URL + '/todos').then((response) => {
+    ToDoRequestService.getAllToDos().then((response) => {
       setToDoList(response.data);
     });
   }, []);
@@ -35,22 +34,15 @@ export default function ToDoListView() {
   };
 
   const handleSave = () => {
-    axios
-      // eslint-disable-next-line no-undef
-      .post(process.env.REACT_APP_API_URL + `/todos`, {
-        name: addItemTextBoxValue,
-      })
-      .then((response) => {
-        const updatedToDos = [...toDoList, response.data];
-        setToDoList(updatedToDos);
-      });
+    ToDoRequestService.saveToDo(addItemTextBoxValue).then((response) => {
+      const updatedToDos = [...toDoList, response.data];
+      setToDoList(updatedToDos);
+    });
     handleClose();
   };
 
   const handleDelete = (itemToDeleteId) => {
-    axios
-      // eslint-disable-next-line no-undef
-      .delete(process.env.REACT_APP_API_URL + `/todos/` + itemToDeleteId)
+    ToDoRequestService.deleteToDo(itemToDeleteId)
       // eslint-disable-next-line no-unused-vars
       .then(() => {
         setToDoList(toDoList.filter((toDo) => toDo.id !== itemToDeleteId));

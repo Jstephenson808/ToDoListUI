@@ -1,8 +1,8 @@
 import { render, screen, waitForElementToBeRemoved, within } from '@testing-library/react';
 import DoMe from './ToDoListView';
 import userEvent from '@testing-library/user-event';
-import axios from 'axios';
 import { act } from 'react-dom/test-utils';
+import ToDoRequestService from './ToDoRequestService';
 
 const addButton = () => screen.getByText('Add');
 const cancelAddToDoButton = () => screen.getByText('Cancel');
@@ -10,17 +10,19 @@ const addToDoDialog = () => screen.queryByRole('dialog');
 const addToDoTextBox = () => screen.getByLabelText('Enter To Do here');
 const saveToDoButton = () => screen.getByText('Save');
 const getMainToDoList = () => screen.getByRole('list');
+const itemOneDeleteButton = () =>
+  within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'delete' });
 
-jest.mock('axios');
+jest.mock('./ToDoRequestService');
 
-describe('To Do List', () => {
+describe('To Do List View', () => {
   beforeEach(async () => {
     const toDos = [
       { id: 1, name: 'Item 1' },
       { id: 2, name: 'Item 2' },
     ];
 
-    axios.get.mockResolvedValue({ data: toDos });
+    ToDoRequestService.getAllToDos.mockResolvedValue({ data: toDos });
     await act(async () => {
       render(<DoMe />);
     });
@@ -33,7 +35,7 @@ describe('To Do List', () => {
   });
 
   it('should fetch data', () => {
-    expect(axios.get).toHaveBeenCalledWith('/todos');
+    expect(ToDoRequestService.getAllToDos).toHaveBeenCalled();
   });
 
   it('should display main todo list', () => {
@@ -52,18 +54,17 @@ describe('To Do List', () => {
   });
 
   it('delete button should send delete request', () => {
-    axios.delete.mockImplementation(() => new Promise(jest.fn()));
+    ToDoRequestService.deleteToDo.mockImplementation(() => new Promise(jest.fn()));
+    userEvent.click(itemOneDeleteButton());
 
-    userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'delete' }));
-
-    expect(axios.delete).toBeCalledWith('/todos/1');
+    expect(ToDoRequestService.deleteToDo).toBeCalledWith(1);
   });
 
   it('delete response should remove item from list', async () => {
-    axios.delete.mockResolvedValue({});
+    ToDoRequestService.deleteToDo.mockResolvedValue({});
 
     await act(async () => {
-      userEvent.click(within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'delete' }));
+      userEvent.click(itemOneDeleteButton());
     });
 
     expect(screen.queryByText('Item 1')).not.toBeInTheDocument();
@@ -102,12 +103,12 @@ describe('To Do List', () => {
     });
 
     it('should post on save', () => {
-      axios.post.mockImplementation(() => new Promise(jest.fn()));
+      ToDoRequestService.saveToDo.mockImplementation(() => new Promise(jest.fn()));
 
       userEvent.type(addToDoTextBox(), 'Item');
       userEvent.click(saveToDoButton());
 
-      expect(axios.post).toHaveBeenCalledWith('/todos', { name: 'Item' });
+      expect(ToDoRequestService.saveToDo).toHaveBeenCalledWith('Item');
     });
     it('should clear the add to do text box when cancel is pressed', (done) => {
       userEvent.type(addToDoTextBox(), 'test todo');
@@ -120,7 +121,7 @@ describe('To Do List', () => {
       });
     });
     it('should add to list on user input', async () => {
-      axios.post.mockResolvedValue({
+      ToDoRequestService.saveToDo.mockResolvedValue({
         data: {
           id: 3,
           name: 'Item 3',
@@ -134,16 +135,6 @@ describe('To Do List', () => {
       });
 
       expect(screen.getByText('Item 3')).toBeInTheDocument();
-    });
-  });
-
-  describe('Axios', () => {
-    it('should fetch data', () => {
-      const toDos = [{ name: 'Item 1' }, { name: 'Item 2' }];
-
-      axios.get.mockImplementationOnce(() => Promise.resolve(toDos));
-
-      expect(axios.get).toHaveBeenCalledWith('/todos');
     });
   });
 });
