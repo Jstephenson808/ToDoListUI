@@ -163,7 +163,7 @@ describe('To Do List View', () => {
     it('dialog should contain save button', () => {
       expect(screen.getByRole('button', { name: 'save-edited-to-do' }));
     });
-    it('dialog should contain save button', () => {
+    it('dialog should contain cancel button', () => {
       expect(screen.getByRole('button', { name: 'cancel-edit-to-do' }));
     });
   });
