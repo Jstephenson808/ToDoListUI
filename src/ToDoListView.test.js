@@ -27,50 +27,40 @@ describe('To Do List View', () => {
       render(<DoMe />);
     });
   });
-  it('should have an add button', () => {
-    expect(addButton()).toBeInTheDocument();
-  });
-  it('should contain a list', () => {
-    expect(screen.getByRole('list')).toBeInTheDocument();
-  });
-
-  it('should fetch data', () => {
-    expect(ToDoRequestService.getAllToDos).toHaveBeenCalled();
-  });
-
-  it('should display main todo list', () => {
-    expect(getMainToDoList()).toBeInTheDocument();
-  });
-
-  it('should display ToDos', () => {
-    expect(screen.getByText('Item 1')).toBeInTheDocument();
-    expect(screen.getByText('Item 2')).toBeInTheDocument();
-  });
-
-  it('list elements should contain delete button', () => {
-    const buttons = within(getMainToDoList()).getAllByRole('button', { name: 'delete' });
-
-    expect(buttons).toHaveLength(2);
-  });
-
-  it('delete button should send delete request', () => {
-    ToDoRequestService.deleteToDo.mockImplementation(() => new Promise(jest.fn()));
-    userEvent.click(itemOneDeleteButton());
-
-    expect(ToDoRequestService.deleteToDo).toBeCalledWith(1);
-  });
-
-  it('delete response should remove item from list', async () => {
-    ToDoRequestService.deleteToDo.mockResolvedValue({});
-
-    await act(async () => {
-      userEvent.click(itemOneDeleteButton());
+  describe('Main To Do List', () => {
+    it('should have an add button', () => {
+      expect(addButton()).toBeInTheDocument();
+    });
+    it('should contain a list', () => {
+      expect(screen.getByRole('list')).toBeInTheDocument();
     });
 
-    expect(screen.queryByText('Item 1')).not.toBeInTheDocument();
-  });
+    it('should fetch data', () => {
+      expect(ToDoRequestService.getAllToDos).toHaveBeenCalled();
+    });
 
-  describe('Add To Do dialog', () => {
+    it('should display main todo list', () => {
+      expect(getMainToDoList()).toBeInTheDocument();
+    });
+
+    it('should display ToDos', () => {
+      expect(screen.getByText('Item 1')).toBeInTheDocument();
+      expect(screen.getByText('Item 2')).toBeInTheDocument();
+    });
+
+    it('list elements should contain delete button', () => {
+      const buttons = within(getMainToDoList()).getAllByRole('button', { name: 'delete' });
+
+      expect(buttons).toHaveLength(2);
+    });
+
+    it('list elements should contain edit button', () => {
+      const buttons = within(getMainToDoList()).getAllByRole('button', { name: 'edit' });
+
+      expect(buttons).toHaveLength(2);
+    });
+  });
+  describe('Add', () => {
     beforeEach(() => {
       userEvent.click(addButton());
     });
@@ -137,4 +127,23 @@ describe('To Do List View', () => {
       expect(screen.getByText('Item 3')).toBeInTheDocument();
     });
   });
+  describe('Delete', () => {
+    it('delete button should send delete request', () => {
+      ToDoRequestService.deleteToDo.mockImplementation(() => new Promise(jest.fn()));
+      userEvent.click(itemOneDeleteButton());
+
+      expect(ToDoRequestService.deleteToDo).toBeCalledWith(1);
+    });
+
+    it('delete response should remove item from list', async () => {
+      ToDoRequestService.deleteToDo.mockResolvedValue({});
+
+      await act(async () => {
+        userEvent.click(itemOneDeleteButton());
+      });
+
+      expect(screen.queryByText('Item 1')).not.toBeInTheDocument();
+    });
+  });
+  // describe('Edit')
 });

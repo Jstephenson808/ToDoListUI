@@ -10,6 +10,7 @@ import {
   TextField,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import { useEffect, useState } from 'react';
 import ToDoRequestService from './ToDoRequestService';
 
@@ -55,6 +56,9 @@ export default function ToDoListView() {
         {toDoList.map((item) => (
           <ListItem key={item.id} aria-label={'list-item-' + item.id}>
             <ListItemText primary={item.name} />
+            <IconButton aria-label="edit">
+              <EditIcon />
+            </IconButton>
             <IconButton aria-label="delete" onClick={() => handleDelete(item.id)}>
               <DeleteIcon />
             </IconButton>
