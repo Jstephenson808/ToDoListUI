@@ -58,6 +58,22 @@ export default function ToDoListView() {
         setToDoList(toDoList.filter((toDo) => toDo.id !== itemToDeleteId));
       });
   };
+  const handleEditSave = () => {
+    ToDoRequestService.editToDo(editItemTextBoxValue);
+    //.then((response) => {
+    // const updatedToDos = toDoList.map((toDo) => {
+    //   if (toDo.id === response.data.id) {
+    //     return response.data;
+    //   }
+    //   return toDo;
+    // });
+    // setToDoList(updatedToDos);
+    //});
+    handleEditClose();
+  };
+  const handleEditClose = () => {
+    setEditItemOpenFlag(false);
+  };
 
   return (
     <>
@@ -108,7 +124,7 @@ export default function ToDoListView() {
           />
         </DialogContent>
         <DialogActions>
-          <IconButton aria-label={'save-edited-to-do'}>
+          <IconButton aria-label={'save-edited-to-do'} onClick={handleEditSave}>
             <SaveIcon />
           </IconButton>
           <IconButton aria-label={'cancel-edit-to-do'}>

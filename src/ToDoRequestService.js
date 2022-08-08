@@ -13,6 +13,9 @@ const ToDoRequestService = {
   deleteToDo(id) {
     return RestClient.delete('/todos/' + id);
   },
+  editToDo(newToDo) {
+    return RestClient.patch('/todos/', { name: newToDo });
+  },
 };
 
 export default ToDoRequestService;
