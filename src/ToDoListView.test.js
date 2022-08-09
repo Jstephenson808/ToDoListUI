@@ -161,13 +161,16 @@ describe('To Do List View', () => {
       expect(editTextBox()).toHaveValue('Item 1');
     });
     it('dialog should contain save button', () => {
-      expect(screen.getByRole('button', { name: 'save-edited-to-do' }));
+      expect(screen.getByRole('button', { name: 'Save' }));
     });
     it('dialog should contain cancel button', () => {
-      expect(screen.getByRole('button', { name: 'cancel-edit-to-do' }));
+      expect(screen.getByRole('button', { name: 'Cancel' }));
     });
     it('should call service when save button is pressed', () => {
-      userEvent.click(screen.getByRole('button', { name: 'save-edited-to-do' }));
+      ToDoRequestService.editToDo.mockImplementation(() => new Promise(jest.fn()));
+      userEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+      expect(ToDoRequestService.editToDo).toBeCalledWith({ id: 1, name: 'Item 1' });
     });
   });
 });

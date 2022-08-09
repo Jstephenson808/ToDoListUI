@@ -23,6 +23,7 @@ export default function ToDoListView() {
   const [editItemTextBoxValue, setEditItemTextBoxValue] = useState('');
   const [toDoList, setToDoList] = useState([]);
   const [editItemOpenFlag, setEditItemOpenFlag] = useState(false);
+  const [currentToDo, setCurrentToDo] = useState({ id: 1, name: 'Item 1' });
 
   useEffect(() => {
     ToDoRequestService.getAllToDos().then((response) => {
@@ -48,6 +49,7 @@ export default function ToDoListView() {
   };
 
   const handleEditOpen = (itemToEdit) => {
+    setCurrentToDo(itemToEdit);
     setEditItemTextBoxValue(itemToEdit.name);
     setEditItemOpenFlag(true);
   };
@@ -59,16 +61,8 @@ export default function ToDoListView() {
       });
   };
   const handleEditSave = () => {
-    ToDoRequestService.editToDo(editItemTextBoxValue);
-    //.then((response) => {
-    // const updatedToDos = toDoList.map((toDo) => {
-    //   if (toDo.id === response.data.id) {
-    //     return response.data;
-    //   }
-    //   return toDo;
-    // });
-    // setToDoList(updatedToDos);
-    //});
+    currentToDo.name = editItemTextBoxValue;
+    ToDoRequestService.editToDo(currentToDo);
     handleEditClose();
   };
   const handleEditClose = () => {
@@ -90,11 +84,9 @@ export default function ToDoListView() {
           </ListItem>
         ))}
       </List>
-      <Button aria-label={'add-button'} onClick={handleAddOpen}>
-        Add
-      </Button>
+      <Button onClick={handleAddOpen}>Add</Button>
 
-      <Dialog open={addButtonOpenFlag} aria-label={'add-new-to-do'}>
+      <Dialog open={addButtonOpenFlag}>
         <DialogTitle>Add New To Do</DialogTitle>
         <DialogContent>
           <TextField
@@ -104,16 +96,12 @@ export default function ToDoListView() {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleAddClose} aria-label={'cancel-add'}>
-            Cancel
-          </Button>
-          <Button onClick={handleSave} aria-label={'save-to-do'}>
-            Save
-          </Button>
+          <Button onClick={handleAddClose}>Cancel</Button>
+          <Button onClick={handleSave}>Save</Button>
         </DialogActions>
       </Dialog>
 
-      <Dialog open={editItemOpenFlag} aria-label={'edit-to-do'}>
+      <Dialog open={editItemOpenFlag}>
         <DialogTitle>Edit</DialogTitle>
         <DialogContent>
           <TextField
@@ -124,10 +112,10 @@ export default function ToDoListView() {
           />
         </DialogContent>
         <DialogActions>
-          <IconButton aria-label={'save-edited-to-do'} onClick={handleEditSave}>
+          <IconButton aria-label={'Save'} onClick={handleEditSave}>
             <SaveIcon />
           </IconButton>
-          <IconButton aria-label={'cancel-edit-to-do'}>
+          <IconButton aria-label={'Cancel'}>
             <CancelIcon />
           </IconButton>
         </DialogActions>
