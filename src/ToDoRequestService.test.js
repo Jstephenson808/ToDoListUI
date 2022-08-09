@@ -38,4 +38,11 @@ describe('To Do List Service', () => {
 
     expect(RestClient.delete).toHaveBeenCalledWith('/todos/1');
   });
+  it('should send patch request when editToDo is called', () => {
+    RestClient.patch.mockImplementation(() => new Promise(jest.fn));
+
+    ToDoRequestService.editToDo({ id: 1, name: 'Item 1' });
+
+    expect(RestClient.patch).toBeCalledWith('/todos/1', { data: { id: 1, name: 'Item 1' } });
+  });
 });

@@ -2,7 +2,6 @@ import RestClient from './RestClient';
 
 const ToDoRequestService = {
   getAllToDos() {
-    // eslint-disable-next-line no-undef
     return RestClient.get('/todos');
   },
 
