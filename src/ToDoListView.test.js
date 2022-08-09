@@ -172,5 +172,14 @@ describe('To Do List View', () => {
 
       expect(ToDoRequestService.editToDo).toBeCalledWith({ id: 1, name: 'Item 1' });
     });
+    it('should set response object to the edited ToDo in array', async () => {
+      ToDoRequestService.editToDo.mockResolvedValue({ data: { id: 1, name: 'Edited Item' } });
+
+      await act(async () => {
+        userEvent.click(screen.getByRole('button', { name: 'Save' }));
+      });
+
+      expect(screen.getByText('Edited Item')).toBeInTheDocument();
+    });
   });
 });

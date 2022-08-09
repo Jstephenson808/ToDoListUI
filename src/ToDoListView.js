@@ -62,7 +62,9 @@ export default function ToDoListView() {
   };
   const handleEditSave = () => {
     currentToDo.name = editItemTextBoxValue;
-    ToDoRequestService.editToDo(currentToDo);
+    ToDoRequestService.editToDo(currentToDo).then((response) => {
+      toDoList[toDoList.findIndex((toDo) => toDo.id === currentToDo.id)] = response.data;
+    });
     handleEditClose();
   };
   const handleEditClose = () => {
