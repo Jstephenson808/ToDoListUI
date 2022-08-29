@@ -7,13 +7,13 @@ import ToDoRequestService from './ToDoRequestService';
 const addButton = () => screen.getByText('Add');
 const cancelAddToDoButton = () => screen.getByText('Cancel');
 const addToDoDialog = () => screen.queryByRole('dialog');
-const addToDoTextBox = () => screen.getByLabelText('Enter To Do here');
+const addToDoTextBox = () => screen.getByLabelText('Enter To Do Here');
 const saveToDoButton = () => screen.getByText('Save');
 const getMainToDoList = () => screen.getByRole('list');
 const itemOneDeleteButton = () =>
   within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'delete' });
-const editButton = () => within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'edit' });
-const editTextBox = () => screen.getByLabelText('Edit To Do here');
+const editButton = (itemName) => within(screen.getByText(itemName).closest('li')).getByRole('button', { name: 'edit' });
+const editTextBox = () => screen.getByLabelText('Edit To Do Here');
 
 jest.mock('./ToDoRequestService');
 
@@ -149,7 +149,7 @@ describe('To Do List View', () => {
   });
   describe('Edit', () => {
     beforeEach(() => {
-      userEvent.click(editButton());
+      userEvent.click(editButton('Item 1'));
     });
     it('should open edit dialogue box when clicked', () => {
       expect(screen.queryByText('Edit')).toBeInTheDocument();
@@ -166,6 +166,12 @@ describe('To Do List View', () => {
     it('dialog should contain cancel button', () => {
       expect(screen.getByRole('button', { name: 'Cancel' }));
     });
+    it('should display value typed in text box', () => {
+      userEvent.clear(editTextBox());
+      userEvent.type(editTextBox(), 'Hello World!');
+
+      expect(screen.getByDisplayValue('Hello World!')).toBeInTheDocument();
+    });
     it('should call service when save button is pressed', () => {
       ToDoRequestService.editToDo.mockImplementation(() => new Promise(jest.fn()));
       userEvent.click(screen.getByRole('button', { name: 'Save' }));
@@ -173,7 +179,9 @@ describe('To Do List View', () => {
       expect(ToDoRequestService.editToDo).toBeCalledWith({ id: 1, name: 'Item 1' });
     });
     it('should set response object to the edited ToDo in array', async () => {
-      ToDoRequestService.editToDo.mockResolvedValue({ data: { id: 1, name: 'Edited Item' } });
+      ToDoRequestService.editToDo.mockResolvedValue({});
+      userEvent.clear(editTextBox());
+      userEvent.type(editTextBox(), 'Edited Item');
 
       await act(async () => {
         userEvent.click(screen.getByRole('button', { name: 'Save' }));

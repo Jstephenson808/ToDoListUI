@@ -13,7 +13,7 @@ const ToDoRequestService = {
     return RestClient.delete('/todos/' + id);
   },
   editToDo(newToDo) {
-    return RestClient.patch('/todos/' + newToDo.id, { data: newToDo });
+    return RestClient.patch('/todos/' + newToDo.id, { name: newToDo.name });
   },
 };
 

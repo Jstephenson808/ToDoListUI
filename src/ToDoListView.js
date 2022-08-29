@@ -60,10 +60,11 @@ export default function ToDoListView() {
         setToDoList(toDoList.filter((toDo) => toDo.id !== itemToDeleteId));
       });
   };
-  const handleEditSave = () => {
+  // todo catch error situation
+  const handleEdit = () => {
     currentToDo.name = editItemTextBoxValue;
-    ToDoRequestService.editToDo(currentToDo).then((response) => {
-      toDoList[toDoList.findIndex((toDo) => toDo.id === currentToDo.id)] = response.data;
+    ToDoRequestService.editToDo(currentToDo).then(() => {
+      toDoList[toDoList.findIndex((toDo) => toDo.id === currentToDo.id)].name = currentToDo.name;
     });
     handleEditClose();
   };
@@ -92,7 +93,7 @@ export default function ToDoListView() {
         <DialogTitle>Add New To Do</DialogTitle>
         <DialogContent>
           <TextField
-            label="Enter To Do here"
+            label="Enter To Do Here"
             value={addItemTextBoxValue}
             onChange={(event) => setAddItemTextBoxValue(event.target.value)}
           />
@@ -107,18 +108,18 @@ export default function ToDoListView() {
         <DialogTitle>Edit</DialogTitle>
         <DialogContent>
           <TextField
-            label="Edit To Do here"
+            label="Edit To Do Here"
             value={editItemTextBoxValue}
             onChange={(event) => setEditItemTextBoxValue(event.target.value)}
             variant="standard"
           />
         </DialogContent>
         <DialogActions>
-          <IconButton aria-label={'Save'} onClick={handleEditSave}>
-            <SaveIcon />
-          </IconButton>
           <IconButton aria-label={'Cancel'}>
             <CancelIcon />
+          </IconButton>
+          <IconButton aria-label={'Save'} onClick={handleEdit}>
+            <SaveIcon />
           </IconButton>
         </DialogActions>
       </Dialog>
