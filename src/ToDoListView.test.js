@@ -147,7 +147,7 @@ describe('To Do List View', () => {
       expect(screen.queryByText('Item 1')).not.toBeInTheDocument();
     });
   });
-  describe('Edit', () => {
+  describe('Edit Dialog', () => {
     beforeEach(() => {
       userEvent.click(editButton('Item 1'));
     });
@@ -172,22 +172,43 @@ describe('To Do List View', () => {
 
       expect(screen.getByDisplayValue('Hello World!')).toBeInTheDocument();
     });
-    it('should call service when save button is pressed', () => {
-      ToDoRequestService.editToDo.mockImplementation(() => new Promise(jest.fn()));
-      userEvent.click(screen.getByRole('button', { name: 'Save' }));
-
-      expect(ToDoRequestService.editToDo).toBeCalledWith({ id: 1, name: 'Item 1' });
-    });
-    it('should set response object to the edited ToDo in array', async () => {
-      ToDoRequestService.editToDo.mockResolvedValue({});
-      userEvent.clear(editTextBox());
-      userEvent.type(editTextBox(), 'Edited Item');
-
-      await act(async () => {
+    describe('Save Change', () => {
+      it('should call service when save button is pressed', () => {
+        ToDoRequestService.editToDo.mockImplementation(() => new Promise(jest.fn()));
         userEvent.click(screen.getByRole('button', { name: 'Save' }));
-      });
 
-      expect(screen.getByText('Edited Item')).toBeInTheDocument();
+        expect(ToDoRequestService.editToDo).toBeCalledWith({ id: 1, name: 'Item 1' });
+      });
+      it('should set response object to the edited ToDo in array', async () => {
+        ToDoRequestService.editToDo.mockResolvedValue({});
+        userEvent.clear(editTextBox());
+        userEvent.type(editTextBox(), 'Edited Item');
+
+        await act(async () => {
+          userEvent.click(screen.getByRole('button', { name: 'Save' }));
+        });
+
+        expect(screen.getByText('Edited Item')).toBeInTheDocument();
+      });
+    });
+    describe('Cancel Change', () => {
+      it('should close dialog on cancel', async () => {
+        await act(async () => {
+          userEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+        });
+
+        expect(screen.queryByRole('dialog')).not.toBeVisible();
+      });
+      it('should not change ToDo when closed', async () => {
+        userEvent.clear(editTextBox());
+        userEvent.type(editTextBox(), 'Edited Item');
+
+        await act(async () => {
+          userEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+        });
+
+        expect(screen.getByText('Item 1')).toBeInTheDocument();
+      });
     });
   });
 });

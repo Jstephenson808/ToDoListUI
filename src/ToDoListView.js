@@ -115,7 +115,7 @@ export default function ToDoListView() {
           />
         </DialogContent>
         <DialogActions>
-          <IconButton aria-label={'Cancel'}>
+          <IconButton aria-label={'Cancel'} onClick={handleEditClose}>
             <CancelIcon />
           </IconButton>
           <IconButton aria-label={'Save'} onClick={handleEdit}>
