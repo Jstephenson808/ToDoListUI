@@ -2,7 +2,6 @@ import RestClient from './RestClient';
 
 const ToDoRequestService = {
   getAllToDos() {
-    // eslint-disable-next-line no-undef
     return RestClient.get('/todos');
   },
 
@@ -12,6 +11,9 @@ const ToDoRequestService = {
 
   deleteToDo(id) {
     return RestClient.delete('/todos/' + id);
+  },
+  editToDo(newToDo) {
+    return RestClient.patch('/todos/' + newToDo.id, { name: newToDo.name });
   },
 };
 

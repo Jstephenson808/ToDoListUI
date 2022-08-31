@@ -7,11 +7,13 @@ import ToDoRequestService from './ToDoRequestService';
 const addButton = () => screen.getByText('Add');
 const cancelAddToDoButton = () => screen.getByText('Cancel');
 const addToDoDialog = () => screen.queryByRole('dialog');
-const addToDoTextBox = () => screen.getByLabelText('Enter To Do here');
+const addToDoTextBox = () => screen.getByLabelText('Enter To Do Here');
 const saveToDoButton = () => screen.getByText('Save');
 const getMainToDoList = () => screen.getByRole('list');
 const itemOneDeleteButton = () =>
   within(screen.getByText('Item 1').closest('li')).getByRole('button', { name: 'delete' });
+const editButton = (itemName) => within(screen.getByText(itemName).closest('li')).getByRole('button', { name: 'edit' });
+const editTextBox = () => screen.getByLabelText('Edit To Do Here');
 
 jest.mock('./ToDoRequestService');
 
@@ -27,50 +29,40 @@ describe('To Do List View', () => {
       render(<DoMe />);
     });
   });
-  it('should have an add button', () => {
-    expect(addButton()).toBeInTheDocument();
-  });
-  it('should contain a list', () => {
-    expect(screen.getByRole('list')).toBeInTheDocument();
-  });
-
-  it('should fetch data', () => {
-    expect(ToDoRequestService.getAllToDos).toHaveBeenCalled();
-  });
-
-  it('should display main todo list', () => {
-    expect(getMainToDoList()).toBeInTheDocument();
-  });
-
-  it('should display ToDos', () => {
-    expect(screen.getByText('Item 1')).toBeInTheDocument();
-    expect(screen.getByText('Item 2')).toBeInTheDocument();
-  });
-
-  it('list elements should contain delete button', () => {
-    const buttons = within(getMainToDoList()).getAllByRole('button', { name: 'delete' });
-
-    expect(buttons).toHaveLength(2);
-  });
-
-  it('delete button should send delete request', () => {
-    ToDoRequestService.deleteToDo.mockImplementation(() => new Promise(jest.fn()));
-    userEvent.click(itemOneDeleteButton());
-
-    expect(ToDoRequestService.deleteToDo).toBeCalledWith(1);
-  });
-
-  it('delete response should remove item from list', async () => {
-    ToDoRequestService.deleteToDo.mockResolvedValue({});
-
-    await act(async () => {
-      userEvent.click(itemOneDeleteButton());
+  describe('Main To Do List', () => {
+    it('should have an add button', () => {
+      expect(addButton()).toBeInTheDocument();
+    });
+    it('should contain a list', () => {
+      expect(screen.getByRole('list')).toBeInTheDocument();
     });
 
-    expect(screen.queryByText('Item 1')).not.toBeInTheDocument();
-  });
+    it('should fetch data', () => {
+      expect(ToDoRequestService.getAllToDos).toHaveBeenCalled();
+    });
 
-  describe('Add To Do dialog', () => {
+    it('should display main todo list', () => {
+      expect(getMainToDoList()).toBeInTheDocument();
+    });
+
+    it('should display ToDos', () => {
+      expect(screen.getByText('Item 1')).toBeInTheDocument();
+      expect(screen.getByText('Item 2')).toBeInTheDocument();
+    });
+
+    it('list elements should contain delete button', () => {
+      const buttons = within(getMainToDoList()).getAllByRole('button', { name: 'delete' });
+
+      expect(buttons).toHaveLength(2);
+    });
+
+    it('list elements should contain edit button', () => {
+      const buttons = within(getMainToDoList()).getAllByRole('button', { name: 'edit' });
+
+      expect(buttons).toHaveLength(2);
+    });
+  });
+  describe('Add', () => {
     beforeEach(() => {
       userEvent.click(addButton());
     });
@@ -135,6 +127,88 @@ describe('To Do List View', () => {
       });
 
       expect(screen.getByText('Item 3')).toBeInTheDocument();
+    });
+  });
+  describe('Delete', () => {
+    it('delete button should send delete request', () => {
+      ToDoRequestService.deleteToDo.mockImplementation(() => new Promise(jest.fn()));
+      userEvent.click(itemOneDeleteButton());
+
+      expect(ToDoRequestService.deleteToDo).toBeCalledWith(1);
+    });
+
+    it('delete response should remove item from list', async () => {
+      ToDoRequestService.deleteToDo.mockResolvedValue({});
+
+      await act(async () => {
+        userEvent.click(itemOneDeleteButton());
+      });
+
+      expect(screen.queryByText('Item 1')).not.toBeInTheDocument();
+    });
+  });
+  describe('Edit Dialog', () => {
+    beforeEach(() => {
+      userEvent.click(editButton('Item 1'));
+    });
+    it('should open edit dialogue box when clicked', () => {
+      expect(screen.queryByText('Edit')).toBeInTheDocument();
+    });
+    it('should contain text box', () => {
+      expect(editTextBox()).toBeInTheDocument();
+    });
+    it('text box should contain To Do name', () => {
+      expect(editTextBox()).toHaveValue('Item 1');
+    });
+    it('dialog should contain save button', () => {
+      expect(screen.getByRole('button', { name: 'Save' }));
+    });
+    it('dialog should contain cancel button', () => {
+      expect(screen.getByRole('button', { name: 'Cancel' }));
+    });
+    it('should display value typed in text box', () => {
+      userEvent.clear(editTextBox());
+      userEvent.type(editTextBox(), 'Hello World!');
+
+      expect(screen.getByDisplayValue('Hello World!')).toBeInTheDocument();
+    });
+    describe('Save Change', () => {
+      it('should call service when save button is pressed', () => {
+        ToDoRequestService.editToDo.mockImplementation(() => new Promise(jest.fn()));
+        userEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+        expect(ToDoRequestService.editToDo).toBeCalledWith({ id: 1, name: 'Item 1' });
+      });
+      it('should set response object to the edited ToDo in array', async () => {
+        ToDoRequestService.editToDo.mockResolvedValue({});
+        userEvent.clear(editTextBox());
+        userEvent.type(editTextBox(), 'Edited Item');
+
+        await act(async () => {
+          userEvent.click(screen.getByRole('button', { name: 'Save' }));
+        });
+
+        expect(screen.getByText('Edited Item')).toBeInTheDocument();
+      });
+    });
+    describe('Cancel Change', () => {
+      it('should close dialog on cancel', async () => {
+        await act(async () => {
+          userEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+        });
+
+        expect(screen.queryByRole('dialog')).not.toBeVisible();
+      });
+      it('should not change ToDo when closed', async () => {
+        userEvent.clear(editTextBox());
+        userEvent.type(editTextBox(), 'Edited Item');
+
+        await act(async () => {
+          userEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+        });
+
+        expect(screen.getByText('Item 1')).toBeInTheDocument();
+      });
     });
   });
 });

@@ -22,14 +22,14 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "run": "react-scripts start",
     "start": "serve -s build",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "test-coverage": "react-scripts test --coverage",
+    "test": "react-scripts test --watchAll=false",
+    "test-coverage": "react-scripts test --watchAll=false --coverage",
     "eject": "react-scripts eject",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "run": "react-scripts start"
+    "lint:fix": "eslint . --fix"
   },
   "eslintConfig": {
     "extends": [
